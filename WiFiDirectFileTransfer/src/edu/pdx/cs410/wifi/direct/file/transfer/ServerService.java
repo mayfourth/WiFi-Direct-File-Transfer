@@ -12,9 +12,11 @@ public class ServerService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		
+		//Code to listen for wifi direct connections
 		while(true)
 		{
 			
+			//When a client is found, start file transfer in new thread 
 		}
 		
 	}

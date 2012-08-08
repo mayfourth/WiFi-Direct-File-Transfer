@@ -16,13 +16,22 @@
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".ServerService" 
-         android:exported="false"/>
-        
-        
+
+        <service
+            android:name=".ServerService"
+            android:exported="false" />
+
+        <activity
+            android:name=".FileBrowser"
+            android:label="@string/title_activity_file_browser" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.pdx.cs410.wifi.direct.file.transfer.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
