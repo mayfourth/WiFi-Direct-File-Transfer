@@ -32,6 +32,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.pdx.cs410.wifi.direct.file.transfer.MainActivity" />
         </activity>
+        <activity
+            android:name=".ClientActivity"
+            android:label="@string/title_activity_client" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.pdx.cs410.wifi.direct.file.transfer.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

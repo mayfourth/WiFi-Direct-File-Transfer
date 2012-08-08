@@ -11,13 +11,19 @@
     <string name="start_server_button">Start Server</string>
     <string name="stop_server_button">Stop Server</string>
     <string name="main_activity_client_title">Client</string>
-    <string name="server_search_button">Search for servers</string>
-    <string name="server_search_results">Search Results</string>
-    <string name="server_service_stopped">Server service has stopped</string>
-    <string name="server_service_running">server service is running</string>
-    <string name="title_activity_file_browser">FileBrowser</string>
+    <string name="start_client">Start Client</string>
+    <string name="server_stopped">Server has stopped</string>
+    <string name="server_running">Server is running</string>
+    <string name="title_activity_file_browser">File Browser</string>
+    <string name="file_browser_title">File Browser</string>
+    <string name="peers_list">Search Results</string>
+    <string name="title_activity_client">WiFi Direct File Transfery</string>
+    
+    <string name="client_title">Client</string>
+    
+        <string name="client_search">Search</string>
+    
+    
+    
 
-    
-     <string name="file_browser_title">File Browser</string>
-    
 </resources>

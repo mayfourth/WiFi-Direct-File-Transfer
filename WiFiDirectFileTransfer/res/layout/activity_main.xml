@@ -57,22 +57,30 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="startServerService"
+            android:onClick="startServer"
             android:text="@string/start_server_button" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="stopServerService"
+            android:onClick="stopServer"
             android:text="@string/stop_server_button" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/server_service_status_text"
+        android:id="@+id/server_status_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:text="@string/server_service_stopped"
+        android:text="@string/server_stopped"
+        tools:context=".MainActivity" />
+    
+    
+        <TextView
+        android:id="@+id/connection_status_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="3dp"
         tools:context=".MainActivity" />
 
     <TextView
@@ -92,21 +100,10 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="searchForServers"
-        android:text="@string/server_search_button" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:onClick="startClientActivity"
+        android:text="@string/start_client" 
         android:layout_gravity="center_horizontal"
-        android:paddingTop="10dp"
-        android:text="@string/server_search_results"
-        tools:context=".MainActivity" />
+        />
 
-    <ListView
-        android:id="@+id/server_search_results_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-    </ListView>
 
 </LinearLayout>

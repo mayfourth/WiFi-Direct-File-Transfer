@@ -1,8 +1,13 @@
 package edu.pdx.cs410.wifi.direct.file.transfer;
 
+import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
@@ -11,8 +16,11 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	
-	//Intent used to start server service
-	private Intent serverServiceIntent; 
+	WifiP2pManager wifiManager;
+	Channel wifichannel;
+	BroadcastReceiver wifiServerReceiver;
+
+	IntentFilter wifiServerReceiverIntentFilter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,8 +30,18 @@ public class MainActivity extends Activity {
         //Block auto opening keyboard
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
-        //Initially set to null
-        serverServiceIntent = null;
+        
+        wifiManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+       // wifichannel = wifiManager.initialize(this, getMainLooper(), null);
+     //   wifiServerReceiver = new WiFiServerBroadcastReceiver(wifiManager, wifichannel, this);
+        
+        /*
+        wifiServerReceiverIntentFilter = new IntentFilter();;
+        wifiServerReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        wifiServerReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        wifiServerReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        wifiServerReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+        */
     }
 
     @Override
@@ -33,44 +51,60 @@ public class MainActivity extends Activity {
     }
        
     public void startFileBrowseActivity(View view) {
+    	
+        Intent clientStartIntent = new Intent(this, FileBrowser.class);
+        startActivity(clientStartIntent);  
 
     }
     
-    public void startServerService(View view) {
-    	   	   	
-    	//Stop any running service first
-    	stopServerService(null);
+    public void startServer(View view) {
+   
+    	registerReceiver(wifiServerReceiver,wifiServerReceiverIntentFilter);
     	
-    	EditText filePathEditText = (EditText) findViewById(R.id.server_file_path);
-    	String filePath = filePathEditText.getText().toString();
-
-    	serverServiceIntent = new Intent(this, ServerService.class);
-    	serverServiceIntent.putExtra("filepath", filePath);
-        startService(serverServiceIntent);
 
     	//Set status to running
-    	TextView serverServiceStatus = (TextView) findViewById(R.id.server_service_status_text);
-    	serverServiceStatus.setText(R.string.server_service_running);
+    	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
+    	serverServiceStatus.setText(R.string.server_running);
 
     }
     
-    public void stopServerService(View view) {
-    	//If the intent isn't null, the service may be running. Attempt to stop. 
+    public void stopServer(View view) {
     	
-    	if(serverServiceIntent != null)
-    	{
-    		stopService(serverServiceIntent);
-    	}
-    	
-    	
+    	unregisterReceiver(wifiServerReceiver);
+
     	//set status to stopped
-    	TextView serverServiceStatus = (TextView) findViewById(R.id.server_service_status_text);
-    	serverServiceStatus.setText(R.string.server_service_stopped);
+    	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
+    	serverServiceStatus.setText(R.string.server_stopped);
 
     }
     
-    public void searchForServers(View view) {
-
+    public void startClientActivity(View view) {
+    	//unregisterReceiver(wifiServerReceiver);
+    	
+        Intent clientStartIntent = new Intent(this, ClientActivity.class);
+        startActivity(clientStartIntent);    		
     }   
+    
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+       // registerReceiver(wifiServerReceiver, wifiServerReceiverIntentFilter);
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //unregisterReceiver(wifiServerReceiver);
+    }
+    
+    
+    
+    public void setStatus(String message)
+    {
+    	TextView connectionStatusText = (TextView) findViewById(R.id.connection_status_text);
+    	connectionStatusText.setText(message);	
+    }
+      
     
 }
