@@ -56,10 +56,12 @@ public class MainActivity extends Activity {
     
     public void stopServerService(View view) {
     	//If the intent isn't null, the service may be running. Attempt to stop. 
+    	
     	if(serverServiceIntent != null)
     	{
     		stopService(serverServiceIntent);
     	}
+    	
     	
     	//set status to stopped
     	TextView serverServiceStatus = (TextView) findViewById(R.id.server_service_status_text);
