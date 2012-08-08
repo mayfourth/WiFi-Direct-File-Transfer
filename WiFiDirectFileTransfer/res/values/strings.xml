@@ -13,6 +13,8 @@
     <string name="stop_server_button">Stop Server</string>
     <string name="main_activity_client_title">Client</string>   
     <string name="server_search_button">Search for servers</string>
-    <string name="server_search_results">Search Results</string>    
-
+    <string name="server_search_results">Search Results</string>
+    
+    <string name="server_service_stopped">Server service has stopped</string>
+    <string name="server_service_running">server service is running</string>
 </resources>

@@ -68,10 +68,18 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/server_service_status_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:text="@string/server_service_stopped"
+        tools:context=".MainActivity" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:paddingTop="40dp"
+        android:paddingTop="30dp"
         android:text="@string/main_activity_client_title"
         android:textSize="24dp"
         tools:context=".MainActivity" />
@@ -95,13 +103,10 @@
         android:text="@string/server_search_results"
         tools:context=".MainActivity" />
 
-    
-    <ListView 
-        android:id="@+id/server_search_results_list" 
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content">
-        
+    <ListView
+        android:id="@+id/server_search_results_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
     </ListView>
-    
-    
+
 </LinearLayout>
