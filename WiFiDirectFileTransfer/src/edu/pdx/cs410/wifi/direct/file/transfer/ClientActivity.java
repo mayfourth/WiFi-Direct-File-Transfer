@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,9 @@ public class ClientActivity extends Activity {
 	BroadcastReceiver wifiClientReceiver;
 
 	IntentFilter wifiClientReceiverIntentFilter;
+	
+	boolean filePathProvided;
+	String filePath;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,9 @@ public class ClientActivity extends Activity {
         wifiClientReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         wifiClientReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         wifiClientReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+        
+        filePathProvided = false;
+        filePath = "";
         
     }
 
@@ -90,6 +97,30 @@ public class ClientActivity extends Activity {
         
         //Discover peers, no call back method given
         wifiManager.discoverPeers(wifichannel, null);
+
+    }
+    
+    
+    public void browseForFile(View view) {
+    	
+        Intent clientStartIntent = new Intent(this, FileBrowser.class);
+        startActivity(clientStartIntent);  
+        
+        //Browse for a file and set this to true if you get back a valid path
+        filePathProvided = true;
+        //put something in filePath
+        
+
+    }
+    
+    
+    public void sendFile(View view) {
+        
+        if(!filePathProvided)
+        {
+        	TextView connectionStatusText = (TextView) findViewById(R.id.file_transfer_status);
+        	connectionStatusText.setText("No file has been specified to transfer");	
+        }
 
     }
     

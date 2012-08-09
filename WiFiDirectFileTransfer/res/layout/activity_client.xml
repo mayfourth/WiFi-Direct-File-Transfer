@@ -14,13 +14,39 @@
         android:text="@string/client_title"
         android:textSize="25dp"
         tools:context=".ClientActivity" />
-
-    <Button
-        android:layout_width="wrap_content"
+    
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:onClick="searchForPeers"
-        android:text="@string/client_search" />
+        android:orientation="horizontal" >
+        
+        
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:onClick="browseForFile"
+            android:text="@string/browse_path_button" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:onClick="searchForPeers"
+            android:text="@string/client_search" />
+        
+            
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:onClick="sendFile"
+            android:text="@string/client_send_file" />
+        
+    </LinearLayout>
     
         <TextView
         android:id="@+id/client_wifi_status_text"
@@ -32,6 +58,15 @@
         
         <TextView
         android:id="@+id/client_status_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="3dp"
+        tools:context=".ClientActivity"
+         />
+        
+        
+        <TextView
+        android:id="@+id/file_transfer_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="3dp"

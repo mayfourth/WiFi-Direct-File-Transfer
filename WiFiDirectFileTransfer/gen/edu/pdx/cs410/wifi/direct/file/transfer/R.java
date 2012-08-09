@@ -17,13 +17,14 @@ public final class R {
     public static final class id {
         public static final int client_status_text=0x7f070001;
         public static final int client_wifi_status_text=0x7f070000;
-        public static final int file_browser_listview=0x7f070003;
-        public static final int menu_settings=0x7f070008;
-        public static final int peers_listview=0x7f070002;
-        public static final int server_file_path=0x7f070004;
-        public static final int server_status_text=0x7f070005;
-        public static final int server_status_text_2=0x7f070007;
-        public static final int server_wifi_status_text=0x7f070006;
+        public static final int file_browser_listview=0x7f070004;
+        public static final int file_transfer_status=0x7f070002;
+        public static final int menu_settings=0x7f070009;
+        public static final int peers_listview=0x7f070003;
+        public static final int server_file_path=0x7f070005;
+        public static final int server_status_text=0x7f070006;
+        public static final int server_status_text_2=0x7f070008;
+        public static final int server_wifi_status_text=0x7f070007;
     }
     public static final class layout {
         public static final int activity_client=0x7f030000;
@@ -39,6 +40,7 @@ public final class R {
         public static final int app_name=0x7f040000;
         public static final int browse_path_button=0x7f040007;
         public static final int client_search=0x7f040013;
+        public static final int client_send_file=0x7f040014;
         public static final int client_title=0x7f040012;
         public static final int file_browser_title=0x7f04000f;
         public static final int hello_world=0x7f040001;

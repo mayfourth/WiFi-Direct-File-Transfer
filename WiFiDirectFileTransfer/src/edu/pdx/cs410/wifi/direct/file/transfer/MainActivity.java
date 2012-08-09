@@ -21,6 +21,8 @@ public class MainActivity extends Activity {
 	BroadcastReceiver wifiServerReceiver;
 
 	IntentFilter wifiServerReceiverIntentFilter;
+	
+	boolean downloadPathProvided;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class MainActivity extends Activity {
     	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
     	serverServiceStatus.setText(R.string.server_stopped);
         
+    	downloadPathProvided = false;
     }
 
     @Override
@@ -58,6 +61,11 @@ public class MainActivity extends Activity {
     	
         Intent clientStartIntent = new Intent(this, FileBrowser.class);
         startActivity(clientStartIntent);  
+        
+        //Get target path 
+        
+        
+        downloadPathProvided = true;
 
     }
     
@@ -69,6 +77,9 @@ public class MainActivity extends Activity {
     	//Set status to running
     	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
     	serverServiceStatus.setText(R.string.server_running);
+    	
+    	
+    	//Create new thread, open socket, wait for connection, and transfer file 
 
     }
     
@@ -100,15 +111,25 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        //registerReceiver(wifiServerReceiver, wifiServerReceiverIntentFilter);
+        registerReceiver(wifiServerReceiver, wifiServerReceiverIntentFilter);
     }
     
     @Override
     protected void onPause() {
         super.onPause();
-        stopServer(null);
+        //stopServer(null);
         //unregisterReceiver(wifiServerReceiver);
     }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        
+        //Unregister broadcast receiver
+        stopServer(null);
+    }
+    
+    
     
     public void setServerWifiStatus(String message)
     {
