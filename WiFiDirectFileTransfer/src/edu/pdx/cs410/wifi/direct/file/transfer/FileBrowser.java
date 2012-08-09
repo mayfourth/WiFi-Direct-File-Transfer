@@ -7,6 +7,7 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,6 +68,19 @@ public class FileBrowser extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+    
+    
+    public void selectDirectory(View view) {
+    	
+	     File f = new File(currentPath);
+	     targetFile = f;
+	     
+	     //Return target File to activity
+		  returnTarget();
+
+
+    }
+    
 
     public void setCurrentPathText(String message)
     {
@@ -128,7 +142,8 @@ public class FileBrowser extends Activity {
 				  if(f.isFile())
 				  {
 					  targetFile = f;
-					  //Close self
+					  returnTarget();
+					  //Return target File to activity
 				  }
 				  else
 				  {
@@ -153,6 +168,18 @@ public class FileBrowser extends Activity {
 	   
 		
 	}
+	
+	public void returnTarget()
+	{
+		
+		Intent returnIntent = new Intent();
+		returnIntent.putExtra("file", targetFile);
+		setResult(RESULT_OK, returnIntent);
+		finish();
+		
+	}
+	
+	
 
 }
 

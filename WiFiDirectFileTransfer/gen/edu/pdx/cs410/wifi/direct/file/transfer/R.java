@@ -51,6 +51,7 @@ public final class R {
         public static final int menu_settings=0x7f040002;
         public static final int path_label=0x7f040005;
         public static final int peers_list=0x7f040010;
+        public static final int select_dir=0x7f040015;
         public static final int server_running=0x7f04000d;
         public static final int server_stopped=0x7f04000c;
         public static final int start_client=0x7f04000b;

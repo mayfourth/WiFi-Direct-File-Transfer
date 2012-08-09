@@ -1,5 +1,7 @@
 package edu.pdx.cs410.wifi.direct.file.transfer;
 
+import java.io.File;
+
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
+	public final int requestID = 55;
 	
 	WifiP2pManager wifiManager;
 	Channel wifichannel;
@@ -61,13 +64,33 @@ public class MainActivity extends Activity {
     public void startFileBrowseActivity(View view) {
     	
         Intent clientStartIntent = new Intent(this, FileBrowser.class);
-        startActivity(clientStartIntent);  
+        startActivityForResult(clientStartIntent, requestID);  
         
         //Get target path 
-        
-        
+              
         downloadPathProvided = true;
 
+    }
+    
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    	if (resultCode == Activity.RESULT_OK && requestCode == requestID) {
+    		//Do something with data 
+    		File targetDir = (File) data.getExtras().get("file");
+    		
+    		if(targetDir.isDirectory())
+    		{
+    	    	TextView filePath = (TextView) findViewById(R.id.server_file_path);
+    	    	filePath.setText(targetDir.getPath());
+    		}
+    		else
+    		{
+    			setServerFileTransferStatus("The selected file is not a directory. Please select a download directory.");
+    		}
+
+        }
     }
     
     public void startServer(View view) {

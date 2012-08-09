@@ -6,7 +6,7 @@
     <string name="title_activity_main">WiFi Direct File Transfer</string>
     <string name="main_activity_server_title">Receive a File</string>
     <string name="path_label">Path</string>
-    <string name="temp_path">root</string>
+    <string name="temp_path">/</string>
     <string name="browse_path_button">Browse</string>
     <string name="start_server_button">Start Server</string>
     <string name="stop_server_button">Stop Server</string>
@@ -22,5 +22,7 @@
     <string name="client_title">Send a File</string>
     <string name="client_search">Search</string>
     <string name="client_send_file">Send</string>
+    
+        <string name="select_dir">Select Directory</string>
 
 </resources>
