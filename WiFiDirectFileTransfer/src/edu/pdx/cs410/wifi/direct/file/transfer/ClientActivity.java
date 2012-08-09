@@ -31,7 +31,7 @@ public class ClientActivity extends Activity {
         
              
         wifiManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        /*
+        
         wifichannel = wifiManager.initialize(this, getMainLooper(), null);
         wifiClientReceiver = new WiFiClientBroadcastReceiver(wifiManager, wifichannel, this);
         
@@ -40,7 +40,7 @@ public class ClientActivity extends Activity {
         wifiClientReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         wifiClientReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         wifiClientReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
-        */
+        
     }
 
     @Override
@@ -62,7 +62,8 @@ public class ClientActivity extends Activity {
     
     
     public void searchForPeers(View view) {
-    	   
+        registerReceiver(wifiClientReceiver, wifiClientReceiverIntentFilter);
+
 
     }
     
@@ -72,13 +73,13 @@ public class ClientActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        //registerReceiver(wifiClientReceiver, wifiClientReceiverIntentFilter);
+        registerReceiver(wifiClientReceiver, wifiClientReceiverIntentFilter);
     }
     
     @Override
     protected void onPause() {
         super.onPause();
-       // unregisterReceiver(wifiClientReceiver);
+        unregisterReceiver(wifiClientReceiver);
     }
     
 

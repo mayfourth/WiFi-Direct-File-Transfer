@@ -32,16 +32,16 @@ public class MainActivity extends Activity {
         
         
         wifiManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-       // wifichannel = wifiManager.initialize(this, getMainLooper(), null);
-     //   wifiServerReceiver = new WiFiServerBroadcastReceiver(wifiManager, wifichannel, this);
+        wifichannel = wifiManager.initialize(this, getMainLooper(), null);
+        wifiServerReceiver = new WiFiServerBroadcastReceiver(wifiManager, wifichannel, this);
         
-        /*
+        
         wifiServerReceiverIntentFilter = new IntentFilter();;
         wifiServerReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         wifiServerReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         wifiServerReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         wifiServerReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
-        */
+        
     }
 
     @Override
@@ -69,8 +69,16 @@ public class MainActivity extends Activity {
     }
     
     public void stopServer(View view) {
-    	
+    		
+    	try
+    	{
     	unregisterReceiver(wifiServerReceiver);
+    	}
+    	catch(IllegalArgumentException e)
+    	{
+    		//This will happen if the server was never running and the stop button was pressed.
+    		//Do nothing in this case.
+    	}
 
     	//set status to stopped
     	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
