@@ -3,14 +3,18 @@ package edu.pdx.cs410.wifi.direct.file.transfer;
 import java.io.File;
 import java.util.ArrayList;
 
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.support.v4.app.NavUtils;
 
 
@@ -44,7 +48,7 @@ public class FileBrowser extends Activity {
         
         targetFile = null;
 
-        displayDirectoryAndGetUserSelection(currentPath);
+        showDir(currentPath);
     }
 
     @Override
@@ -71,7 +75,7 @@ public class FileBrowser extends Activity {
     }
 
 
-	private void displayDirectoryAndGetUserSelection(String targetDirectory){
+	private void showDir(String targetDirectory){
 		
 		setCurrentPathText("Current Directory: " + currentPath);
 		
@@ -111,6 +115,36 @@ public class FileBrowser extends Activity {
 
 	    ArrayAdapter<String> directoryData = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, targets);
 	    fileBrowserListView.setAdapter(directoryData);
+	    
+	    
+	    
+	    
+	    fileBrowserListView.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> arg0, View view, int pos,long id) {
+				
+				  File f = new File(paths.get(pos));
+				  
+				  if(f.isFile())
+				  {
+					  targetFile = f;
+					  //Close self
+				  }
+				  else
+				  {
+					  //f must be a dir
+					  if(f.canRead())
+					  {
+						  currentPath = paths.get(pos);
+						  showDir(paths.get(pos));
+					  }
+					  
+				  }
+
+				
+			}			
+				// TODO Auto-generated method stub				
+			});
 	    
 	    /*
 		final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
