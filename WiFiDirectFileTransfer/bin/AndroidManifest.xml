@@ -23,7 +23,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main" 
+             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,14 +38,17 @@
 
         <activity
             android:name=".FileBrowser"
-            android:label="@string/title_activity_file_browser" >
+            android:label="@string/title_activity_file_browser" 
+            android:screenOrientation="portrait">
+            
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.pdx.cs410.wifi.direct.file.transfer.MainActivity" />
         </activity>
         <activity
             android:name=".ClientActivity"
-            android:label="@string/title_activity_client" >
+            android:label="@string/title_activity_client" 
+             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.pdx.cs410.wifi.direct.file.transfer.MainActivity" />

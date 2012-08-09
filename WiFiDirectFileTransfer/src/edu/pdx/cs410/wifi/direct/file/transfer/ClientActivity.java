@@ -107,7 +107,7 @@ public class ClientActivity extends Activity {
         startActivity(clientStartIntent);  
         
         //Browse for a file and set this to true if you get back a valid path
-        filePathProvided = true;
+        //filePathProvided = true;
         //put something in filePath
         
 

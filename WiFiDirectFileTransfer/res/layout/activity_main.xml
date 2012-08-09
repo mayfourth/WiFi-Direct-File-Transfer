@@ -90,6 +90,13 @@
         android:layout_height="wrap_content"
         android:paddingTop="3dp"
         tools:context=".MainActivity" />
+         
+        <TextView
+        android:id="@+id/server_file_transfer_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="3dp"
+        tools:context=".MainActivity" />
 
     <TextView
         android:layout_width="wrap_content"

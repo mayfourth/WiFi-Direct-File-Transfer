@@ -64,11 +64,11 @@ public class WiFiClientBroadcastReceiver extends BroadcastReceiver {
         	
         	if(networkState.isConnected())
         	{
-        		activity.setClientStatus("Connected");
+        		activity.setClientStatus("Connection Status: Connected");
         	}
         	else
         	{
-        		activity.setClientStatus("Disconnected");
+        		activity.setClientStatus("Connection Status: Disconnected");
         		manager.cancelConnect(channel, null);
 
         	}

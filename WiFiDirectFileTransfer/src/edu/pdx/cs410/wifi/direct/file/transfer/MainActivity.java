@@ -49,6 +49,7 @@ public class MainActivity extends Activity {
     	serverServiceStatus.setText(R.string.server_stopped);
         
     	downloadPathProvided = false;
+    	setServerFileTransferStatus("No File being transfered");
     }
 
     @Override
@@ -143,6 +144,12 @@ public class MainActivity extends Activity {
     	server_status_text.setText(message);	
     }
     
+    
+    public void setServerFileTransferStatus(String message)
+    {
+    	TextView server_status_text = (TextView) findViewById(R.id.server_file_transfer_status);
+    	server_status_text.setText(message);	
+    }
     
     
       
