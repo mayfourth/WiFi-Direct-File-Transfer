@@ -14,7 +14,7 @@
     <string name="start_client">Start Client</string>
     <string name="server_stopped">Server has stopped</string>
     <string name="server_running">Server is running</string>
-    <string name="title_activity_file_browser">File Browser</string>
+    <string name="title_activity_file_browser">WiFi Direct File Transfer</string>
     <string name="file_browser_title">File Browser</string>
     <string name="peers_list">Search Results</string>
     <string name="title_activity_client">WiFi Direct File Transfer</string>

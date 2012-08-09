@@ -9,6 +9,7 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 
 /*
 Some of this code is developed from samples from the Google WiFi Direct API Guide 
+http://developer.android.com/guide/topics/connectivity/wifip2p.html
 */
 
 

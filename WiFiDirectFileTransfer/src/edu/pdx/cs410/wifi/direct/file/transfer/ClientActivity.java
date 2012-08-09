@@ -118,8 +118,7 @@ public class ClientActivity extends Activity {
         
         if(!filePathProvided)
         {
-        	TextView connectionStatusText = (TextView) findViewById(R.id.file_transfer_status);
-        	connectionStatusText.setText("No file has been specified to transfer");	
+        	setClientFileTransferStatus("No file has been specified to transfer");
         }
 
     }
@@ -154,9 +153,18 @@ public class ClientActivity extends Activity {
     
     public void setClientStatus(String message)
     {
-    	TextView connectionStatusText = (TextView) findViewById(R.id.client_status_text);
-    	connectionStatusText.setText(message);	
+    	TextView clientStatusText = (TextView) findViewById(R.id.client_status_text);
+    	clientStatusText.setText(message);	
     }
+    
+    public void setClientFileTransferStatus(String message)
+    {
+    	TextView fileTransferStatusText = (TextView) findViewById(R.id.file_transfer_status);
+    	fileTransferStatusText.setText(message);	
+    }
+    
+    
+    
     
     
     public void displayPeers(final WifiP2pDeviceList peers)
@@ -181,7 +189,7 @@ public class ClientActivity extends Activity {
     	peerView.setClickable(true);
     	   
     	//Make adapter to connect peer data to list view
-    	ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, peersStringArrayList.toArray());    			
+    	ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, peersStringArrayList.toArray());    			
     	
     	//Show peer data in listview
     	peerView.setAdapter(arrayAdapter);

@@ -15,6 +15,12 @@
         android:text="@string/file_browser_title"
         tools:context=".FileBrowser" />
     
+        <TextView
+        android:id="@+id/current_path"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:context=".FileBrowser" />
+    
         <ListView
         android:id="@+id/file_browser_listview"
         android:layout_width="wrap_content"
