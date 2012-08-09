@@ -7,8 +7,9 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 
 /*
-Developed from code samples from the Google WiFi Direct API Guide 
+Some of this code is developed from samples from the Google WiFi Direct API Guide 
 */
+
 
 public class WiFiServerBroadcastReceiver extends BroadcastReceiver {
 
@@ -22,7 +23,7 @@ public class WiFiServerBroadcastReceiver extends BroadcastReceiver {
         this.channel = channel;
         this.activity = activity;
         
-    	activity.setStatus("Server Broadcast Receiver started");
+    	activity.setServerStatus("Server Broadcast Receiver created");
 
     }
 
@@ -35,9 +36,9 @@ public class WiFiServerBroadcastReceiver extends BroadcastReceiver {
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
             
             if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
-            	activity.setStatus("Wifi Direct is enabled");
+            	activity.setServerWifiStatus("Wifi Direct is enabled");
             } else {
-            	activity.setStatus("Wifi Direct is not enabled");
+            	activity.setServerWifiStatus("Wifi Direct is not enabled");
             }
             
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {

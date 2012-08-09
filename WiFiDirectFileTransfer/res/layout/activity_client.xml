@@ -23,6 +23,14 @@
         android:text="@string/client_search" />
     
         <TextView
+        android:id="@+id/client_wifi_status_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="3dp"
+        tools:context=".ClientActivity"
+         />
+        
+        <TextView
         android:id="@+id/client_status_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

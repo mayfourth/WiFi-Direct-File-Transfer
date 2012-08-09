@@ -77,7 +77,14 @@
     
     
         <TextView
-        android:id="@+id/connection_status_text"
+        android:id="@+id/server_wifi_status_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="3dp"
+        tools:context=".MainActivity" />
+        
+         <TextView
+        android:id="@+id/server_status_text_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="3dp"

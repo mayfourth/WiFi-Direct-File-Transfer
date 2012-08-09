@@ -42,6 +42,10 @@ public class MainActivity extends Activity {
         wifiServerReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         wifiServerReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
         
+    	//set status to stopped
+    	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
+    	serverServiceStatus.setText(R.string.server_stopped);
+        
     }
 
     @Override
@@ -106,13 +110,20 @@ public class MainActivity extends Activity {
         //unregisterReceiver(wifiServerReceiver);
     }
     
-    
-    
-    public void setStatus(String message)
+    public void setServerWifiStatus(String message)
     {
-    	TextView connectionStatusText = (TextView) findViewById(R.id.connection_status_text);
-    	connectionStatusText.setText(message);	
+    	TextView server_wifi_status_text = (TextView) findViewById(R.id.server_wifi_status_text);
+    	server_wifi_status_text.setText(message);	
     }
+    
+    public void setServerStatus(String message)
+    {
+    	TextView server_status_text = (TextView) findViewById(R.id.server_status_text_2);
+    	server_status_text.setText(message);	
+    }
+    
+    
+    
       
     
 }
