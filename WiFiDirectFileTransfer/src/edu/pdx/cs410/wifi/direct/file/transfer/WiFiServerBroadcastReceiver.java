@@ -21,6 +21,9 @@ public class WiFiServerBroadcastReceiver extends BroadcastReceiver {
         this.manager = manager;
         this.channel = channel;
         this.activity = activity;
+        
+    	activity.setStatus("Server Broadcast Receiver started");
+
     }
 
     @Override

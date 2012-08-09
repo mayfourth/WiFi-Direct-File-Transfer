@@ -87,7 +87,6 @@ public class MainActivity extends Activity {
     }
     
     public void startClientActivity(View view) {
-    	//unregisterReceiver(wifiServerReceiver);
     	
         Intent clientStartIntent = new Intent(this, ClientActivity.class);
         startActivity(clientStartIntent);    		
@@ -97,12 +96,13 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-       // registerReceiver(wifiServerReceiver, wifiServerReceiverIntentFilter);
+        //registerReceiver(wifiServerReceiver, wifiServerReceiverIntentFilter);
     }
     
     @Override
     protected void onPause() {
         super.onPause();
+        stopServer(null);
         //unregisterReceiver(wifiServerReceiver);
     }
     

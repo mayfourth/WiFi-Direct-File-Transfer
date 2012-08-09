@@ -14,19 +14,28 @@
         android:text="@string/client_title"
         android:textSize="25dp"
         tools:context=".ClientActivity" />
-    
-        <Button
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="searchForPeers"
-        android:text="@string/client_search" 
         android:layout_gravity="center_horizontal"
-        />
+        android:onClick="searchForPeers"
+        android:text="@string/client_search" />
+    
+        <TextView
+        android:id="@+id/client_status_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="3dp"
+        tools:context=".ClientActivity"
+         />
 
     <ListView
         android:id="@+id/peers_listview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
     </ListView>
+    
+    
 
 </LinearLayout>
