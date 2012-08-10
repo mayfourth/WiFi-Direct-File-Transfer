@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.ResultReceiver;
+import android.view.View;
 
 public class ServerService extends IntentService {
 
@@ -16,6 +17,7 @@ public class ServerService extends IntentService {
 	private int port;
 	private File saveLocation;
 	private ResultReceiver serverResult;
+	private View updateArea;
 	
 	public ServerService() {
 		super("ServerService");
@@ -29,8 +31,11 @@ public class ServerService extends IntentService {
 		port = ((Integer) intent.getExtras().get("port")).intValue();	
 		saveLocation = (File) intent.getExtras().get("saveLocation");
 		serverResult = (ResultReceiver) intent.getExtras().get("serverResult");	
+		//updateArea = (View) intent.getExtras().get("serverResult");	
 		
-		updateActivityUI("Attempting to download file to " + saveLocation.getPath());
+		
+		signalActivity("Starting to download");
+		 
 		
 		
 		while(true && serviceEnabled)
@@ -43,18 +48,20 @@ public class ServerService extends IntentService {
 		
 		//Socket code here
 		
-		
+		//signalActivity("past the loop");
+
 		
 		
 		//Signal that operation is complete
 		serverResult.send(port, null);
 	}
 	
-	
-	public void updateActivityUI(String message)
+
+	public void signalActivity(String message)
 	{
-		
-		
+		Bundle b = new Bundle();
+		b.putString("message", message);
+		serverResult.send(port, b);
 	}
 	
 	

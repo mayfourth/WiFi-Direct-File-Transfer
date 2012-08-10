@@ -124,17 +124,46 @@ public class MainActivity extends Activity {
 	    	serverServiceIntent.putExtra("port", new Integer(port));
 	    	serverServiceIntent.putExtra("serverResult", new ResultReceiver(null) {
 	    	    @Override
-	    	    protected void onReceiveResult(int resultCode, Bundle resultData) {
+	    	    protected void onReceiveResult(int resultCode, final Bundle resultData) {
 	    	    	
-	    	        if (resultCode == port) {
-	    	           //Download complete, server service has shut down
-	    	        	serverThreadActive = false;	    
-	    	        	stopServer(null);
-	    	        }
+	    	    	if(resultCode == port )
+	    	    	{
+		    	        if (resultData == null) {
+		    	           //Download complete, server service has shut down
+		    	        	serverThreadActive = false;	
+		    	        	
+		    	        	
+		    	        	final TextView server_status_text = (TextView) findViewById(R.id.server_status_text);
+		    	        	server_status_text.post(new Runnable() {
+		    	                public void run() {
+				    	        	server_status_text.setText(R.string.server_stopped);
+		    	                }
+		    	        	});	
+		    	        	
+		    	        	final TextView server_file_status_text = (TextView) findViewById(R.id.server_file_transfer_status);
+
+		    	        	server_file_status_text.post(new Runnable() {
+		    	                public void run() {
+		    	                	server_file_status_text.setText("No File being transfered");
+		    	                }
+		    	        	});	
+		    	        			    	        	
+		    	        }
+		    	        else
+		    	        {    	        	
+		    	        	final TextView server_file_status_text = (TextView) findViewById(R.id.server_file_transfer_status);
+
+		    	        	server_file_status_text.post(new Runnable() {
+		    	                public void run() {
+		    	                	server_file_status_text.setText((String)resultData.get("message"));
+		    	                }
+		    	        	});		    	   		    	        	
+		    	        }
+	    	    	}
 	    	           	        
 	    	    }
 	    	});
-	
+	    		    		
 	    	serverThreadActive = true;
 	        startService(serverServiceIntent);
 	
@@ -157,15 +186,8 @@ public class MainActivity extends Activity {
     	//stop download thread 
     	stopService(serverServiceIntent);
        	
-    	//The server has only stopped if the server thread is not active
-    	if(!serverThreadActive)
-    	{
-	    	//set status to stopped
-	    	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
-	    	serverServiceStatus.setText(R.string.server_stopped);
-	    	setServerFileTransferStatus("No File being transfered");
-    	}
     }
+     
     
     public void startClientActivity(View view) {
     	
@@ -228,10 +250,5 @@ public class MainActivity extends Activity {
     	server_status_text.setText(message);	
     }
     
-    
-    
-    
-    
-    
-      
+         
 }
