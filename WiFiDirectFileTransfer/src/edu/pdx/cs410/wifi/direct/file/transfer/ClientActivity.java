@@ -29,20 +29,20 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class ClientActivity extends Activity {
 	
-	public final int requestID = 98;
+	public final int fileRequestID = 98;
 
 	
-	WifiP2pManager wifiManager;
-	Channel wifichannel;
-	BroadcastReceiver wifiClientReceiver;
+	private WifiP2pManager wifiManager;
+	private Channel wifichannel;
+	private BroadcastReceiver wifiClientReceiver;
 
-	IntentFilter wifiClientReceiverIntentFilter;
+	private IntentFilter wifiClientReceiverIntentFilter;
 
-	boolean connectedAndReadyToSendFile;
+	private boolean connectedAndReadyToSendFile;
 	
-	boolean filePathProvided;
-	String filePath;
-	File fileToSend;
+	private boolean filePathProvided;
+	private String filePath;
+	private File fileToSend;
 		
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -120,7 +120,7 @@ public class ClientActivity extends Activity {
     
     public void browseForFile(View view) {
         Intent clientStartIntent = new Intent(this, FileBrowser.class);
-        startActivityForResult(clientStartIntent, requestID);  
+        startActivityForResult(clientStartIntent, fileRequestID);  
         
     }
     
@@ -130,7 +130,7 @@ public class ClientActivity extends Activity {
     	
     	//fileToSend
 
-    	if (resultCode == Activity.RESULT_OK && requestCode == requestID) {
+    	if (resultCode == Activity.RESULT_OK && requestCode == fileRequestID) {
     		//Fetch result
     		File targetDir = (File) data.getExtras().get("file");
     		
@@ -170,7 +170,7 @@ public class ClientActivity extends Activity {
         }
         else if(!connectedAndReadyToSendFile)
         {
-        	setClientFileTransferStatus("You must be connected a server before attempting to send a file");
+        	setClientFileTransferStatus("You must be connected to a server before attempting to send a file");
         }
         else
         {

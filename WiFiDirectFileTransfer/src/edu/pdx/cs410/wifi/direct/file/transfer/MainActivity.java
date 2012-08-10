@@ -5,6 +5,7 @@ import java.io.File;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,16 +18,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-	public final int requestID = 55;
-	
-	WifiP2pManager wifiManager;
-	Channel wifichannel;
-	BroadcastReceiver wifiServerReceiver;
+	public final int fileRequestID = 55;
+	public final int port = 7950;
 
-	IntentFilter wifiServerReceiverIntentFilter;
 	
-	String path;
-	File downloadTarget;
+	private WifiP2pManager wifiManager;
+	private Channel wifichannel;
+	private BroadcastReceiver wifiServerReceiver;
+
+	private IntentFilter wifiServerReceiverIntentFilter;
+	
+	private String path;
+	private File downloadTarget;
+	
+	private Intent serverServiceIntent; 
+	
+	private boolean serverThreadActive;
+
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +60,10 @@ public class MainActivity extends Activity {
         
     	path = "/";
     	downloadTarget = new File(path);
+    	
+    	serverServiceIntent = null; 
+    	serverThreadActive = false;
+    	
     	setServerFileTransferStatus("No File being transfered");
     }
 
@@ -64,7 +76,7 @@ public class MainActivity extends Activity {
     public void startFileBrowseActivity(View view) {
     	
         Intent clientStartIntent = new Intent(this, FileBrowser.class);
-        startActivityForResult(clientStartIntent, requestID);  
+        startActivityForResult(clientStartIntent, fileRequestID);  
         //Path returned to onActivityResult
               
     }
@@ -72,7 +84,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-    	if (resultCode == Activity.RESULT_OK && requestCode == requestID) {
+    	if (resultCode == Activity.RESULT_OK && requestCode == fileRequestID) {
     		//Fetch result
     		File targetDir = (File) data.getExtras().get("file");
     		
@@ -102,31 +114,63 @@ public class MainActivity extends Activity {
     
     public void startServer(View view) {
     	
-    	//Create new thread, open socket, wait for connection, and transfer file 
-
-
-    	//Set status to running
-    	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
-    	serverServiceStatus.setText(R.string.server_running);
-    	
-    
+    	//If server is already listening on port or transfering data, do not attempt to start server service 
+    	if(!serverThreadActive)
+    	{
+	    	//Create new thread, open socket, wait for connection, and transfer file 
+	
+	    	serverServiceIntent = new Intent(this, ServerService.class);
+	    	serverServiceIntent.putExtra("saveLocation", downloadTarget);
+	    	serverServiceIntent.putExtra("port", new Integer(port));
+	    	serverServiceIntent.putExtra("serverResult", new ResultReceiver(null) {
+	    	    @Override
+	    	    protected void onReceiveResult(int resultCode, Bundle resultData) {
+	    	    	
+	    	        if (resultCode == port) {
+	    	           //Download complete, server service has shut down
+	    	        	serverThreadActive = false;	    
+	    	        	stopServer(null);
+	    	        }
+	    	           	        
+	    	    }
+	    	});
+	
+	    	serverThreadActive = true;
+	        startService(serverServiceIntent);
+	
+	    	//Set status to running
+	    	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
+	    	serverServiceStatus.setText(R.string.server_running);
+	    	
+	    }
+    	else
+    	{
+	    	//Set status to already running
+	    	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
+	    	serverServiceStatus.setText("The server is already running");
+    		
+    	}
     }
     
     public void stopServer(View view) {
     		
     	//stop download thread 
-
-    	
-    	
-    	//set status to stopped
-    	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
-    	serverServiceStatus.setText(R.string.server_stopped);
-    	setServerFileTransferStatus("No File being transfered");
+    	stopService(serverServiceIntent);
+       	
+    	//The server has only stopped if the server thread is not active
+    	if(!serverThreadActive)
+    	{
+	    	//set status to stopped
+	    	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
+	    	serverServiceStatus.setText(R.string.server_stopped);
+	    	setServerFileTransferStatus("No File being transfered");
+    	}
     }
     
     public void startClientActivity(View view) {
     	
     	stopServer(null);
+        stopService(serverServiceIntent);
         Intent clientStartIntent = new Intent(this, ClientActivity.class);
         startActivity(clientStartIntent);    		
     }   
@@ -150,6 +194,8 @@ public class MainActivity extends Activity {
         super.onDestroy();
         
         stopServer(null);
+        
+        stopService(serverServiceIntent);
         
         //Unregister broadcast receiver		
 		try {
@@ -181,5 +227,11 @@ public class MainActivity extends Activity {
     	TextView server_status_text = (TextView) findViewById(R.id.server_file_transfer_status);
     	server_status_text.setText(message);	
     }
+    
+    
+    
+    
+    
+    
       
 }
