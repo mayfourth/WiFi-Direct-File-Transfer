@@ -43,26 +43,41 @@ public class ClientService extends IntentService {
 		//targetDevice = (WifiP2pDevice) intent.getExtras().get("targetDevice");	
 		wifiInfo = (WifiP2pInfo) intent.getExtras().get("wifiInfo");	
 		
-		//targetDevice.
-		signalActivity(wifiInfo.isGroupOwner + " Transfering file " + fileToSend.getName() + " to " + wifiInfo.groupOwnerAddress.toString()  + " on TCP Port: " + port );
-		
-		InetAddress targetIP = wifiInfo.groupOwnerAddress;
-		
-		Socket clientSocket = null;
-		OutputStream os = null;
-		 
-	
-		try {
-			clientSocket = new Socket(targetIP, port);
-			os = clientSocket.getOutputStream();
+		if(!wifiInfo.isGroupOwner)
+		{	
+			//targetDevice.
+			signalActivity(wifiInfo.isGroupOwner + " Transfering file " + fileToSend.getName() + " to " + wifiInfo.groupOwnerAddress.toString()  + " on TCP Port: " + port );
+			
+			InetAddress targetIP = wifiInfo.groupOwnerAddress;
+			
+			Socket clientSocket = null;
+			OutputStream os = null;
+			 
+			try {
+				
+				clientSocket = new Socket(targetIP, port);
+				os = clientSocket.getOutputStream();
+				
+				
+				
+				
+				
+				
+				
+				
+				
 
-		} catch (IOException e) {
-			//signalActivity("Failed to make TCP connection");
+			} catch (IOException e) {
+				signalActivity(e.getMessage());
+			}		
 		}
-		
-		
+		else
+		{
+			signalActivity("This device is a group owner, therefore the IP address of the " +
+					"target device cannot be determined. File transfer cannot continue");
+		}
 	
-		//clientResult.send(port, null);
+		clientResult.send(port, null);
 	}
 	
 

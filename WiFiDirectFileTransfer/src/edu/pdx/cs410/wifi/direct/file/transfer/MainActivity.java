@@ -68,7 +68,7 @@ public class MainActivity extends Activity {
     	
         registerReceiver(wifiServerReceiver, wifiServerReceiverIntentFilter);
 
-        
+/*        
         wifiManager.createGroup(wifichannel,  new WifiP2pManager.ActionListener()  {
     	    public void onSuccess() {
     	    	setServerFileTransferStatus("WiFi Group creation successful");
@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
 
     	    }
     	});    	
-    	
+    	*/
         
     }
 
@@ -149,25 +149,16 @@ public class MainActivity extends Activity {
 	    	    	if(resultCode == port )
 	    	    	{
 		    	        if (resultData == null) {
-		    	           //Download complete, server service has shut down
+		    	           //Server service has shut down. Download may or may not have completed properly. 
 		    	        	serverThreadActive = false;	
-		    	        	
-		    	        	
+		    	        			    	        	
 		    	        	final TextView server_status_text = (TextView) findViewById(R.id.server_status_text);
 		    	        	server_status_text.post(new Runnable() {
 		    	                public void run() {
 				    	        	server_status_text.setText(R.string.server_stopped);
 		    	                }
 		    	        	});	
-		    	        	
-		    	        	final TextView server_file_status_text = (TextView) findViewById(R.id.server_file_transfer_status);
-
-		    	        	server_file_status_text.post(new Runnable() {
-		    	                public void run() {
-		    	                	server_file_status_text.setText("No File being transfered");
-		    	                }
-		    	        	});	
-		    	        			    	        	
+		    	        			    	        			    	        	
 		    	        }
 		    	        else
 		    	        {    	        	

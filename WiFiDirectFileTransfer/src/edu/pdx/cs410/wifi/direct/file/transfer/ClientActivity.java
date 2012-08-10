@@ -219,16 +219,8 @@ public class ClientActivity extends Activity {
 		    	    	if(resultCode == port )
 		    	    	{
 			    	        if (resultData == null) {
-			    	           //Transfer complete client service has shut down
-			    	        	transferActive = false;	
-			    	        				    	        	
-			    	        	final TextView client_status_text = (TextView) findViewById(R.id.file_transfer_status);
-			    	        	client_status_text.post(new Runnable() {
-			    	                public void run() {
-			    	                	client_status_text.setText("File " + fileToSend.getName() + " has been transfered to " + wifiInfo.groupOwnerAddress.toString());
-			    	                }
-			    	        	});	
-			    	        				    	        			    	        	
+			    	           //Client service has shut down, the transfer may or may not have been successful. Refer to message 
+			    	        	transferActive = false;				    	        				    	       			    	        				    	        			    	        	
 			    	        }
 			    	        else
 			    	        {    	        	
