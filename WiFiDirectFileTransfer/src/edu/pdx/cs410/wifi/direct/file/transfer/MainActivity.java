@@ -184,7 +184,11 @@ public class MainActivity extends Activity {
     public void stopServer(View view) {
     		
     	//stop download thread 
-    	stopService(serverServiceIntent);
+    	if(serverServiceIntent != null)
+    	{
+    		stopService(serverServiceIntent);
+    	
+    	}
        	
     }
      
@@ -192,7 +196,6 @@ public class MainActivity extends Activity {
     public void startClientActivity(View view) {
     	
     	stopServer(null);
-        stopService(serverServiceIntent);
         Intent clientStartIntent = new Intent(this, ClientActivity.class);
         startActivity(clientStartIntent);    		
     }   
@@ -217,7 +220,7 @@ public class MainActivity extends Activity {
         
         stopServer(null);
         
-        stopService(serverServiceIntent);
+        //stopService(serverServiceIntent);
         
         //Unregister broadcast receiver		
 		try {

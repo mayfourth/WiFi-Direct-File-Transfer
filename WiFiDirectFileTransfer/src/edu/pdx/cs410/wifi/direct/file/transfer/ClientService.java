@@ -1,6 +1,9 @@
 package edu.pdx.cs410.wifi.direct.file.transfer;
 
+
 import java.io.File;
+
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
 
 
@@ -8,18 +11,18 @@ import android.os.Bundle;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.ResultReceiver;
-import android.view.View;
 
-public class ServerService extends IntentService {
+public class ClientService extends IntentService {
 
 	private boolean serviceEnabled;
 	
 	private int port;
-	private File saveLocation;
-	private ResultReceiver serverResult;
+	private File fileToSend;
+	private ResultReceiver clientResult;
+	private WifiP2pDevice targetDevice;
 	
-	public ServerService() {
-		super("ServerService");
+	public ClientService() {
+		super("ClientService");
 		serviceEnabled = true;
 		
 	}
@@ -28,11 +31,12 @@ public class ServerService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		
 		port = ((Integer) intent.getExtras().get("port")).intValue();	
-		saveLocation = (File) intent.getExtras().get("saveLocation");
-		serverResult = (ResultReceiver) intent.getExtras().get("serverResult");	
+		fileToSend = (File) intent.getExtras().get("fileToSend");
+		clientResult = (ResultReceiver) intent.getExtras().get("clientResult");	
+		targetDevice = (WifiP2pDevice) intent.getExtras().get("targetDevice");	
 		
-		
-		//signalActivity("Starting to download");
+		//targetDevice.
+		signalActivity("Starting to upload");
 		 
 		
 		
@@ -51,7 +55,7 @@ public class ServerService extends IntentService {
 		
 		
 		//Signal that operation is complete
-		serverResult.send(port, null);
+		clientResult.send(port, null);
 	}
 	
 
@@ -59,7 +63,7 @@ public class ServerService extends IntentService {
 	{
 		Bundle b = new Bundle();
 		b.putString("message", message);
-		serverResult.send(port, b);
+		clientResult.send(port, b);
 	}
 	
 	

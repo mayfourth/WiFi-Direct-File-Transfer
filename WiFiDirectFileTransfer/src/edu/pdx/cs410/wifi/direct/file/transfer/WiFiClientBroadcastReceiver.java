@@ -65,11 +65,15 @@ public class WiFiClientBroadcastReceiver extends BroadcastReceiver {
         	
         	if(networkState.isConnected())
         	{
+        		//set client state so that all needed fields to make a transfer are ready
+        		
         		activity.setTransferStatus(true);
         		activity.setClientStatus("Connection Status: Connected");
         	}
         	else
         	{
+        		//set variables to disable file transfer and reset client back to original state
+
         		activity.setTransferStatus(false);
         		activity.setClientStatus("Connection Status: Disconnected");
         		manager.cancelConnect(channel, null);

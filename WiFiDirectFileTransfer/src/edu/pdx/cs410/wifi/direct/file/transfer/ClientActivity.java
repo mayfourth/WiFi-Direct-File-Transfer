@@ -9,6 +9,7 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -30,6 +31,8 @@ import android.widget.AdapterView.OnItemClickListener;
 public class ClientActivity extends Activity {
 	
 	public final int fileRequestID = 98;
+	public final int port = 7950;
+
 
 	
 	private WifiP2pManager wifiManager;
@@ -41,8 +44,12 @@ public class ClientActivity extends Activity {
 	private boolean connectedAndReadyToSendFile;
 	
 	private boolean filePathProvided;
-	private String filePath;
 	private File fileToSend;
+	private boolean transferActive;
+	
+	private Intent clientServiceIntent; 
+	private WifiP2pDevice targetDevice;
+
 		
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,8 +70,10 @@ public class ClientActivity extends Activity {
         
         connectedAndReadyToSendFile = false;
         filePathProvided = false;
-        filePath = "";
         fileToSend = null;
+        transferActive = false;
+        clientServiceIntent = null;
+        targetDevice = null;
         
         setClientFileTransferStatus("Client is currently idle");
                 
@@ -139,7 +148,6 @@ public class ClientActivity extends Activity {
     			if(targetDir.canRead())
     			{
     				fileToSend = targetDir;
-    				filePath = fileToSend.getPath();
     				filePathProvided = true;
     				
     				setTargetFileStatus(targetDir.getName() + " selected for file transfer");
@@ -164,19 +172,65 @@ public class ClientActivity extends Activity {
     
     public void sendFile(View view) {
         
-        if(!filePathProvided)
-        {
-        	setClientFileTransferStatus("Select a file to send before pressing send");
-        }
-        else if(!connectedAndReadyToSendFile)
-        {
-        	setClientFileTransferStatus("You must be connected to a server before attempting to send a file");
-        }
-        else
-        {
-        	//Ready to launch new thread
-        }
+    	//Only try to send file if there isn't already a transfer active
+    	if(!transferActive)
+    	{
+	        if(!filePathProvided)
+	        {
+	        	setClientFileTransferStatus("Select a file to send before pressing send");
+	        }
+	        else if(!connectedAndReadyToSendFile || (targetDevice == null))
+	        {
+	        	setClientFileTransferStatus("You must be connected to a server before attempting to send a file");
+	        }
+	        else
+	        {
+	        	//Launch client service
+	        	clientServiceIntent = new Intent(this, ClientService.class);
+	        	clientServiceIntent.putExtra("fileToSend", fileToSend);
+	        	clientServiceIntent.putExtra("port", new Integer(port));
+	        	clientServiceIntent.putExtra("targetDevice", targetDevice);
+	        	clientServiceIntent.putExtra("clientResult", new ResultReceiver(null) {
+		    	    @Override
+		    	    protected void onReceiveResult(int resultCode, final Bundle resultData) {
+		    	    	
+		    	    	if(resultCode == port )
+		    	    	{
+			    	        if (resultData == null) {
+			    	           //Transfer complete client service has shut down
+			    	        	transferActive = false;	
+			    	        				    	        	
+			    	        	final TextView client_status_text = (TextView) findViewById(R.id.file_transfer_status);
+			    	        	client_status_text.post(new Runnable() {
+			    	                public void run() {
+			    	                	client_status_text.setText("File " + fileToSend.getName() + " has been transfered to " + targetDevice.deviceName);
+			    	                }
+			    	        	});	
+			    	        				    	        			    	        	
+			    	        }
+			    	        else
+			    	        {    	        	
+			    	        	final TextView client_status_text = (TextView) findViewById(R.id.file_transfer_status);
 
+			    	        	client_status_text.post(new Runnable() {
+			    	                public void run() {
+			    	                	client_status_text.setText((String)resultData.get("message"));
+			    	                }
+			    	        	});		    	   		    	        	
+			    	        }
+		    	    	}
+		    	           	        
+		    	    }
+		    	});
+	        	
+	        	transferActive = true;
+		        startService(clientServiceIntent);
+
+	        	
+	        	
+	        	//end
+	        }
+    	}
     }
     
     @Override
@@ -290,10 +344,12 @@ public class ClientActivity extends Activity {
   	
     }
         
-    public void connectToPeer(final WifiP2pDevice targetDevice)
+    public void connectToPeer(final WifiP2pDevice wifiPeer)
     {
+    	this.targetDevice = wifiPeer;
+    	
     	WifiP2pConfig config = new WifiP2pConfig();
-    	config.deviceAddress = targetDevice.deviceAddress;
+    	config.deviceAddress = wifiPeer.deviceAddress;
     	wifiManager.connect(wifichannel, config, new WifiP2pManager.ActionListener()  {
     	    public void onSuccess() {
     	    	
