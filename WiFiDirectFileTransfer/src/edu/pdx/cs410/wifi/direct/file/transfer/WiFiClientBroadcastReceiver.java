@@ -4,9 +4,12 @@
 package edu.pdx.cs410.wifi.direct.file.transfer;
 
 import android.content.BroadcastReceiver;
+import android.net.wifi.p2p.WifiP2pInfo;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.NetworkInfo;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
@@ -62,12 +65,15 @@ public class WiFiClientBroadcastReceiver extends BroadcastReceiver {
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
         	
         	NetworkInfo networkState = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+        	WifiP2pInfo wifiInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_INFO);
+        	WifiP2pDevice device = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
         	
         	if(networkState.isConnected())
         	{
         		//set client state so that all needed fields to make a transfer are ready
         		
-        		activity.setTransferStatus(true);
+        		//activity.setTransferStatus(true);
+        		activity.setNetworkToReadyState(true, wifiInfo, device);
         		activity.setClientStatus("Connection Status: Connected");
         	}
         	else

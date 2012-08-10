@@ -65,6 +65,26 @@ public class MainActivity extends Activity {
     	serverThreadActive = false;
     	
     	setServerFileTransferStatus("No File being transfered");
+    	
+        registerReceiver(wifiServerReceiver, wifiServerReceiverIntentFilter);
+
+        
+        wifiManager.createGroup(wifichannel,  new WifiP2pManager.ActionListener()  {
+    	    public void onSuccess() {
+    	    	setServerFileTransferStatus("WiFi Group creation successful");
+
+    	    	//Group creation successful
+    	    }
+
+    	    public void onFailure(int reason) {
+    	    	setServerFileTransferStatus("WiFi Group creation failed");
+
+    	    	//Group creation failed
+
+    	    }
+    	});    	
+    	
+        
     }
 
     @Override
@@ -204,7 +224,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(wifiServerReceiver, wifiServerReceiverIntentFilter);
     }
     
     @Override

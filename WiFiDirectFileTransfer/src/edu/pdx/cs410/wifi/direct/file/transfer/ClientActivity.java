@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ public class ClientActivity extends Activity {
 	
 	private Intent clientServiceIntent; 
 	private WifiP2pDevice targetDevice;
+	private WifiP2pInfo wifiInfo;
 
 		
     @Override
@@ -74,7 +76,10 @@ public class ClientActivity extends Activity {
         transferActive = false;
         clientServiceIntent = null;
         targetDevice = null;
+        wifiInfo = null;
         
+        registerReceiver(wifiClientReceiver, wifiClientReceiverIntentFilter);
+
         setClientFileTransferStatus("Client is currently idle");
                 
         //setTargetFileStatus("testing");
@@ -105,6 +110,12 @@ public class ClientActivity extends Activity {
     }
     
     
+    public void setNetworkToReadyState(boolean status, WifiP2pInfo info, WifiP2pDevice device)
+    {
+    	wifiInfo = info;
+    	targetDevice = device;
+    	connectedAndReadyToSendFile = status;
+    }
     
     private void stopClientReceiver()
     {        
@@ -179,9 +190,19 @@ public class ClientActivity extends Activity {
 	        {
 	        	setClientFileTransferStatus("Select a file to send before pressing send");
 	        }
-	        else if(!connectedAndReadyToSendFile || (targetDevice == null))
+	        else if(!connectedAndReadyToSendFile)
 	        {
 	        	setClientFileTransferStatus("You must be connected to a server before attempting to send a file");
+	        }
+	        /*
+	        else if(targetDevice == null)
+	        {
+	        	setClientFileTransferStatus("Target Device network information unknown");
+	        }
+	        */
+	        else if(wifiInfo == null)
+	        {
+	        	setClientFileTransferStatus("Missing Wifi P2P information");
 	        }
 	        else
 	        {
@@ -189,7 +210,8 @@ public class ClientActivity extends Activity {
 	        	clientServiceIntent = new Intent(this, ClientService.class);
 	        	clientServiceIntent.putExtra("fileToSend", fileToSend);
 	        	clientServiceIntent.putExtra("port", new Integer(port));
-	        	clientServiceIntent.putExtra("targetDevice", targetDevice);
+	        	//clientServiceIntent.putExtra("targetDevice", targetDevice);
+	        	clientServiceIntent.putExtra("wifiInfo", wifiInfo);
 	        	clientServiceIntent.putExtra("clientResult", new ResultReceiver(null) {
 		    	    @Override
 		    	    protected void onReceiveResult(int resultCode, final Bundle resultData) {
@@ -203,7 +225,7 @@ public class ClientActivity extends Activity {
 			    	        	final TextView client_status_text = (TextView) findViewById(R.id.file_transfer_status);
 			    	        	client_status_text.post(new Runnable() {
 			    	                public void run() {
-			    	                	client_status_text.setText("File " + fileToSend.getName() + " has been transfered to " + targetDevice.deviceName);
+			    	                	client_status_text.setText("File " + fileToSend.getName() + " has been transfered to " + wifiInfo.groupOwnerAddress.toString());
 			    	                }
 			    	        	});	
 			    	        				    	        			    	        	
@@ -236,7 +258,6 @@ public class ClientActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(wifiClientReceiver, wifiClientReceiverIntentFilter);
     }
     
     @Override
@@ -317,19 +338,19 @@ public class ClientActivity extends Activity {
 				//Get string from textview
 				TextView tv = (TextView) view;
 				
-				WifiP2pDevice targetDevice = null;
+				WifiP2pDevice device = null;
 				
 				//Search all known peers for matching name
 		    	for(WifiP2pDevice wd : peers.getDeviceList())
 		    	{
 		    		if(wd.deviceName.equals(tv.getText()))
-		    				targetDevice = wd;		    			
+		    			device = wd;		    			
 		    	}
 				
-				if(targetDevice != null)
+				if(device != null)
 				{
 					//Connect to selected peer
-					connectToPeer(targetDevice);
+					connectToPeer(device);
 										
 				}
 				else
