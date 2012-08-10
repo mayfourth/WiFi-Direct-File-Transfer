@@ -72,6 +72,16 @@
         android:paddingTop="3dp"
         tools:context=".ClientActivity"
          />
+        
+        
+        <TextView
+        android:id="@+id/selected_filename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="3dp"
+        tools:context=".ClientActivity"
+        android:text="@string/no_file_selected"        
+         />
 
     <ListView
         android:id="@+id/peers_listview"

@@ -22,7 +22,9 @@
     <string name="client_title">Send a File</string>
     <string name="client_search">Search</string>
     <string name="client_send_file">Send</string>
+    <string name="no_file_selected">No file selected to transfer</string>
     
-        <string name="select_dir">Select Directory</string>
+    
+    <string name="select_dir">Select Directory</string>
 
 </resources>

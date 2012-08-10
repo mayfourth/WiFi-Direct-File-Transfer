@@ -25,8 +25,9 @@ public class MainActivity extends Activity {
 
 	IntentFilter wifiServerReceiverIntentFilter;
 	
-	boolean downloadPathProvided;
-
+	String path;
+	File downloadTarget;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,13 +35,11 @@ public class MainActivity extends Activity {
         
         //Block auto opening keyboard
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        
-        
+               
         wifiManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         wifichannel = wifiManager.initialize(this, getMainLooper(), null);
         wifiServerReceiver = new WiFiServerBroadcastReceiver(wifiManager, wifichannel, this);
-        
-        
+              
         wifiServerReceiverIntentFilter = new IntentFilter();;
         wifiServerReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         wifiServerReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -51,7 +50,8 @@ public class MainActivity extends Activity {
     	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
     	serverServiceStatus.setText(R.string.server_stopped);
         
-    	downloadPathProvided = false;
+    	path = "/";
+    	downloadTarget = new File(path);
     	setServerFileTransferStatus("No File being transfered");
     }
 
@@ -65,68 +65,68 @@ public class MainActivity extends Activity {
     	
         Intent clientStartIntent = new Intent(this, FileBrowser.class);
         startActivityForResult(clientStartIntent, requestID);  
-        
-        //Get target path 
+        //Path returned to onActivityResult
               
-        downloadPathProvided = true;
-
     }
-    
-    
+      
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     	if (resultCode == Activity.RESULT_OK && requestCode == requestID) {
-    		//Do something with data 
+    		//Fetch result
     		File targetDir = (File) data.getExtras().get("file");
     		
     		if(targetDir.isDirectory())
     		{
-    	    	TextView filePath = (TextView) findViewById(R.id.server_file_path);
-    	    	filePath.setText(targetDir.getPath());
+    			if(targetDir.canWrite())
+    			{
+    				downloadTarget = targetDir;
+	    	    	TextView filePath = (TextView) findViewById(R.id.server_file_path);
+	    	    	filePath.setText(targetDir.getPath());
+	    			setServerFileTransferStatus("Download directory set to " + targetDir.getName());
+	    			
+    			}
+    			else
+    			{
+	    			setServerFileTransferStatus("You do not have permission to write to " + targetDir.getName());
+    			}
+
     		}
     		else
     		{
-    			setServerFileTransferStatus("The selected file is not a directory. Please select a download directory.");
+    			setServerFileTransferStatus("The selected file is not a directory. Please select a valid download directory.");
     		}
 
         }
     }
     
     public void startServer(View view) {
-   
-    	registerReceiver(wifiServerReceiver,wifiServerReceiverIntentFilter);
     	
+    	//Create new thread, open socket, wait for connection, and transfer file 
+
 
     	//Set status to running
     	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
     	serverServiceStatus.setText(R.string.server_running);
     	
-    	
-    	//Create new thread, open socket, wait for connection, and transfer file 
-
+    
     }
     
     public void stopServer(View view) {
     		
-    	try
-    	{
-    	unregisterReceiver(wifiServerReceiver);
-    	}
-    	catch(IllegalArgumentException e)
-    	{
-    		//This will happen if the server was never running and the stop button was pressed.
-    		//Do nothing in this case.
-    	}
+    	//stop download thread 
 
+    	
+    	
     	//set status to stopped
     	TextView serverServiceStatus = (TextView) findViewById(R.id.server_status_text);
     	serverServiceStatus.setText(R.string.server_stopped);
-
+    	setServerFileTransferStatus("No File being transfered");
     }
     
     public void startClientActivity(View view) {
     	
+    	stopServer(null);
         Intent clientStartIntent = new Intent(this, ClientActivity.class);
         startActivity(clientStartIntent);    		
     }   
@@ -149,8 +149,16 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         
-        //Unregister broadcast receiver
         stopServer(null);
+        
+        //Unregister broadcast receiver		
+		try {
+			unregisterReceiver(wifiServerReceiver);
+		} catch (IllegalArgumentException e) {
+			// This will happen if the server was never running and the stop
+			// button was pressed.
+			// Do nothing in this case.
+		}      
     }
     
     
@@ -173,8 +181,5 @@ public class MainActivity extends Activity {
     	TextView server_status_text = (TextView) findViewById(R.id.server_file_transfer_status);
     	server_status_text.setText(message);	
     }
-    
-    
       
-    
 }

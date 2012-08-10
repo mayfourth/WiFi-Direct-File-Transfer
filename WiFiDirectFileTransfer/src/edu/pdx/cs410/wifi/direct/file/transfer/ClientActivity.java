@@ -1,5 +1,6 @@
 package edu.pdx.cs410.wifi.direct.file.transfer;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -28,15 +29,21 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class ClientActivity extends Activity {
 	
+	public final int requestID = 98;
+
+	
 	WifiP2pManager wifiManager;
 	Channel wifichannel;
 	BroadcastReceiver wifiClientReceiver;
 
 	IntentFilter wifiClientReceiverIntentFilter;
+
+	boolean connectedAndReadyToSendFile;
 	
 	boolean filePathProvided;
 	String filePath;
-
+	File fileToSend;
+		
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,9 +61,14 @@ public class ClientActivity extends Activity {
         wifiClientReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         wifiClientReceiverIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
         
+        connectedAndReadyToSendFile = false;
         filePathProvided = false;
         filePath = "";
+        fileToSend = null;
         
+        setClientFileTransferStatus("Client is currently idle");
+                
+        //setTargetFileStatus("testing");
     }
 
     @Override
@@ -66,6 +78,12 @@ public class ClientActivity extends Activity {
         return true;
     }
 
+    
+    public void setTransferStatus(boolean status)
+    {
+    	connectedAndReadyToSendFile = status;
+    }
+    
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -93,7 +111,6 @@ public class ClientActivity extends Activity {
     }
         
     public void searchForPeers(View view) {
-        registerReceiver(wifiClientReceiver, wifiClientReceiverIntentFilter);
         
         //Discover peers, no call back method given
         wifiManager.discoverPeers(wifichannel, null);
@@ -102,15 +119,46 @@ public class ClientActivity extends Activity {
     
     
     public void browseForFile(View view) {
-    	
         Intent clientStartIntent = new Intent(this, FileBrowser.class);
-        startActivity(clientStartIntent);  
+        startActivityForResult(clientStartIntent, requestID);  
         
-        //Browse for a file and set this to true if you get back a valid path
-        //filePathProvided = true;
-        //put something in filePath
-        
+    }
+    
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	
+    	//fileToSend
 
+    	if (resultCode == Activity.RESULT_OK && requestCode == requestID) {
+    		//Fetch result
+    		File targetDir = (File) data.getExtras().get("file");
+    		
+    		if(targetDir.isFile())
+    		{
+    			if(targetDir.canRead())
+    			{
+    				fileToSend = targetDir;
+    				filePath = fileToSend.getPath();
+    				filePathProvided = true;
+    				
+    				setTargetFileStatus(targetDir.getName() + " selected for file transfer");
+    					    			
+    			}
+    			else
+    			{
+    				filePathProvided = false;
+    				setTargetFileStatus("You do not have permission to read the file " + targetDir.getName());
+    			}
+
+    		}
+    		else
+    		{
+				filePathProvided = false;
+    			setTargetFileStatus("You may not transfer a directory, please select a single file");
+    		}
+
+        }
     }
     
     
@@ -118,7 +166,15 @@ public class ClientActivity extends Activity {
         
         if(!filePathProvided)
         {
-        	setClientFileTransferStatus("No file has been specified to transfer");
+        	setClientFileTransferStatus("Select a file to send before pressing send");
+        }
+        else if(!connectedAndReadyToSendFile)
+        {
+        	setClientFileTransferStatus("You must be connected a server before attempting to send a file");
+        }
+        else
+        {
+        	//Ready to launch new thread
         }
 
     }
@@ -139,6 +195,8 @@ public class ClientActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        
+        //Kill thread that is transferring data 
         
         //Unregister broadcast receiver
         stopClientReceiver();
@@ -163,10 +221,13 @@ public class ClientActivity extends Activity {
     	fileTransferStatusText.setText(message);	
     }
     
+    public void setTargetFileStatus(String message)
+    {
+    	TextView targetFileStatus = (TextView) findViewById(R.id.selected_filename);
+    	targetFileStatus.setText(message);	
+    }
     
-    
-    
-    
+     
     public void displayPeers(final WifiP2pDeviceList peers)
     {
     	//Dialog to show errors/status
@@ -235,6 +296,7 @@ public class ClientActivity extends Activity {
     	config.deviceAddress = targetDevice.deviceAddress;
     	wifiManager.connect(wifichannel, config, new WifiP2pManager.ActionListener()  {
     	    public void onSuccess() {
+    	    	
     	    	//setClientStatus("Connection to " + targetDevice.deviceName + " sucessful");
     	    }
 
