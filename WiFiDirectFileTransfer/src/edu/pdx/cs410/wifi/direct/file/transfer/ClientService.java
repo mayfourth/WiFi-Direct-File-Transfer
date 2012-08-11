@@ -1,9 +1,15 @@
 package edu.pdx.cs410.wifi.direct.file.transfer;
 
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -46,7 +52,7 @@ public class ClientService extends IntentService {
 		if(!wifiInfo.isGroupOwner)
 		{	
 			//targetDevice.
-			signalActivity(wifiInfo.isGroupOwner + " Transfering file " + fileToSend.getName() + " to " + wifiInfo.groupOwnerAddress.toString()  + " on TCP Port: " + port );
+			//signalActivity(wifiInfo.isGroupOwner + " Transfering file " + fileToSend.getName() + " to " + wifiInfo.groupOwnerAddress.toString()  + " on TCP Port: " + port );
 			
 			InetAddress targetIP = wifiInfo.groupOwnerAddress;
 			
@@ -57,25 +63,100 @@ public class ClientService extends IntentService {
 				
 				clientSocket = new Socket(targetIP, port);
 				os = clientSocket.getOutputStream();
-				
-				
-				
-				
-				
-				
-				
-				
-				
+				PrintWriter pw = new PrintWriter(os);
 
+				
+				InputStream is = clientSocket.getInputStream();
+				InputStreamReader isr = new InputStreamReader(is);
+				BufferedReader br = new BufferedReader(isr);			
+				
+				signalActivity("About to start handshake");
+
+				
+				
+				//Client-Server handshake
+				/*
+				pw.println(fileToSend.getName());
+
+				
+				
+				String inputData = "";
+				
+				pw.println("wdft_client_hello");
+				
+				inputData = br.readLine();
+				
+				if(!inputData.equals("wdft_server_hello"))
+				{
+					throw new IOException("Invalid WDFT protocol message");
+					
+				}
+
+				
+				pw.println(fileToSend.getName());
+
+				if(!inputData.equals("wdft_server_ready"))
+				{
+					throw new IOException("Invalid WDFT protocol message");
+					
+				}
+				
+				*/
+				
+				//Handshake complete, start file transfer
+				
+				
+				
+			    byte[] buffer = new byte[1024];
+			    
+			    FileInputStream fis = new FileInputStream(fileToSend);
+			    BufferedInputStream bis = new BufferedInputStream(fis);
+			    long BytesToSend = fileToSend.length();
+			    
+			    
+			    			  		    
+			    while(BytesToSend > 0)
+			    {
+			    	
+				    int bytesRead = bis.read(buffer, 0, buffer.length);
+				    
+				    if(bytesRead == -1)
+				    {
+				    	break;
+				    }
+				    
+				    BytesToSend = BytesToSend - bytesRead;
+				    os.write(buffer,0,buffer.length);
+				    os.flush();			    
+			    }
+			    
+			    
+			    
+			    fis.close();
+			    bis.close();			    
+			    os.close();
+			    clientSocket.close();
+			    
+			    
+			    signalActivity("File Transfer Complete");
+			    
+				
 			} catch (IOException e) {
 				signalActivity(e.getMessage());
-			}		
+			}
+			catch(Exception e)
+			{
+				signalActivity(e.getMessage());
+
+			}
+			
 		}
 		else
 		{
 			signalActivity("This device is a group owner, therefore the IP address of the " +
 					"target device cannot be determined. File transfer cannot continue");
 		}
+		
 	
 		clientResult.send(port, null);
 	}

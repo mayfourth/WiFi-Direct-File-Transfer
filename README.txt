@@ -20,3 +20,7 @@ if this is caused by a fault in the program or if it is specific to the device.
 
 *Scanning for WiFi peers randomly takes an unusually long time.
 
+*Transferred files do not match the original files name or extension
+
+*The service service cannot be shut off via the stop server button
+
