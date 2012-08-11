@@ -133,11 +133,17 @@ public class ClientService extends IntentService {
 			    
 			    
 			    fis.close();
-			    bis.close();			    
+			    bis.close();
+			    
+			    br.close();
+			    isr.close();
+			    is.close();
+			    
+			    pw.close();		    
 			    os.close();
+			    			   			    
 			    clientSocket.close();
-			    
-			    
+			    			    
 			    signalActivity("File Transfer Complete");
 			    
 				

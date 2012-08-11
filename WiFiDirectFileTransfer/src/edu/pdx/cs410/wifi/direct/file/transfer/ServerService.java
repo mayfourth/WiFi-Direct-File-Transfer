@@ -129,19 +129,24 @@ public class ServerService extends IntentService {
 			    if(bytesRead == -1)
 			    {
 			    	break;
-			    }
-			    
+			    }			    
 			    bos.write(buffer, 0, bytesRead);
-
 
 		    }
 		    		    
 
 		    
+		    fos.close();
 		    bos.close();
-		    socket.close();
 		    
-
+		    br.close();
+		    isr.close();
+		    is.close();
+		    
+		    pw.close();
+		    os.close();
+		    		    
+		    socket.close();
 		    
 		    
 		    signalActivity("File Transfer Complete");
