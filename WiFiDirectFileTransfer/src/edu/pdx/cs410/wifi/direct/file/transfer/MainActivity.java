@@ -151,6 +151,7 @@ public class MainActivity extends Activity {
 		    	        if (resultData == null) {
 		    	           //Server service has shut down. Download may or may not have completed properly. 
 		    	        	serverThreadActive = false;	
+		    	        	
 		    	        			    	        	
 		    	        	final TextView server_status_text = (TextView) findViewById(R.id.server_status_text);
 		    	        	server_status_text.post(new Runnable() {
@@ -158,6 +159,7 @@ public class MainActivity extends Activity {
 				    	        	server_status_text.setText(R.string.server_stopped);
 		    	                }
 		    	        	});	
+		    	        	
 		    	        			    	        			    	        	
 		    	        }
 		    	        else
@@ -194,6 +196,7 @@ public class MainActivity extends Activity {
     
     public void stopServer(View view) {
     		
+    	
     	//stop download thread 
     	if(serverServiceIntent != null)
     	{

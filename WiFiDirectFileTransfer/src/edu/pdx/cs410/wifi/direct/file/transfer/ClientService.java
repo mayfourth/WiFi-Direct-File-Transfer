@@ -107,15 +107,13 @@ public class ClientService extends IntentService {
 				
 				
 				
-			    byte[] buffer = new byte[1024];
+			    byte[] buffer = new byte[4096];
 			    
 			    FileInputStream fis = new FileInputStream(fileToSend);
 			    BufferedInputStream bis = new BufferedInputStream(fis);
-			    long BytesToSend = fileToSend.length();
-			    
-			    
-			    			  		    
-			    while(BytesToSend > 0)
+			   // long BytesToSend = fileToSend.length();
+			    			   			    			  		    
+			    while(true)
 			    {
 			    	
 				    int bytesRead = bis.read(buffer, 0, buffer.length);
@@ -125,8 +123,8 @@ public class ClientService extends IntentService {
 				    	break;
 				    }
 				    
-				    BytesToSend = BytesToSend - bytesRead;
-				    os.write(buffer,0,buffer.length);
+				    //BytesToSend = BytesToSend - bytesRead;
+				    os.write(buffer,0, bytesRead);
 				    os.flush();			    
 			    }
 			    
