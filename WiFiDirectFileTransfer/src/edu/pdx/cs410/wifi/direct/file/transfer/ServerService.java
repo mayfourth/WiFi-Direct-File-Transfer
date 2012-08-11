@@ -125,8 +125,8 @@ public class ServerService extends IntentService {
 				
 				//signalActivity("Handshake complete, getting file: " + fileName);
 	
-				
-			    File file = new File(saveLocation, "WDFL_File_" + System.currentTimeMillis());
+				String savedAs = "WDFL_File_" + System.currentTimeMillis();
+			    File file = new File(saveLocation, savedAs);
 			    
 			    byte[] buffer = new byte[4096];
 			    int bytesRead;
@@ -165,7 +165,7 @@ public class ServerService extends IntentService {
 			    socket.close();
 	
 			    
-			    signalActivity("File Transfer Complete");
+			    signalActivity("File Transfer Complete, saved as: " + savedAs);
 			    //Start writing to file
 
 			}

@@ -142,7 +142,7 @@ public class ClientService extends IntentService {
 			    			   			    
 			    clientSocket.close();
 			    			    
-			    signalActivity("File Transfer Complete");
+			    signalActivity("File Transfer Complete, sent file: " + fileToSend.getName());
 			    
 				
 			} catch (IOException e) {
