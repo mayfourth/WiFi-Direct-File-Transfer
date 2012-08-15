@@ -1,0 +1,17 @@
+This project is distributed as an Eclipse IDE project. 
+
+Download and install the latest JDK from:
+http://www.oracle.com/technetwork/java/javase/downloads/index.html 
+
+Download and install the Android SDK from:
+http://developer.android.com/sdk/index.html 
+
+Download and install Eclipse IDE from:
+http://www.eclipse.org/downloads/ 
+
+Follow the instructions here to install the Android plugin for Eclipse:
+http://developer.android.com/sdk/installing/installing-adt.html 
+
+Download the project from the latest commit. Open eclipse and import the project into your workspace. 
+
+
