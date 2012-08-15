@@ -1,3 +1,31 @@
+/*
+ WiFi Direct File Transfer is an open source application that will enable sharing 
+ of data between Android devices running Android 4.0 or higher using a WiFi direct
+ connection without the use of a separate WiFi access point.This will enable data 
+ transfer between devices without relying on any existing network infrastructure. 
+ This application is intended to provide a much higher speed alternative to Bluetooth
+ file transfers. 
+
+ Copyright (C) 2012  Teja R. Pitla
+ Contact: teja.pitla@gmail.com
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+
+
+
 package edu.pdx.cs410.wifi.direct.file.transfer;
 
 
